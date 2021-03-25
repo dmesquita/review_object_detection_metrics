@@ -32,10 +32,10 @@ def coco2bb(path=None, annotations_dict=None, bb_type=BBType.GROUND_TRUTH):
         annotation_files = [0]
     # Loop through each file
     for file_path in annotation_files:
-        if not validations.is_coco_format(file_path):
-            continue
 
         if path:
+            if not validations.is_coco_format(file_path):
+                continue
             with open(file_path, "r") as f:
                 json_object = json.load(f)
         else:
