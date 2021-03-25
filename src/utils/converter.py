@@ -22,17 +22,24 @@ def _get_annotation_files(file_path):
     return sorted(annotation_files)
 
 
-def coco2bb(path, bb_type=BBType.GROUND_TRUTH):
+def coco2bb(path=None, annotations_dict=None, bb_type=BBType.GROUND_TRUTH):
     ret = []
     # Get annotation files in the path
-    annotation_files = _get_annotation_files(path)
+    if path:
+        annotation_files = _get_annotation_files(path)
+    else:
+        # TODO: re-structure code to remove loop if not loading from file
+        annotation_files = [0]
     # Loop through each file
     for file_path in annotation_files:
         if not validations.is_coco_format(file_path):
             continue
 
-        with open(file_path, "r") as f:
-            json_object = json.load(f)
+        if path:
+            with open(file_path, "r") as f:
+                json_object = json.load(f)
+        else:
+            json_object = annotations_dict
 
         # COCO json file contains basically 3 lists:
         # categories: containing the classes
